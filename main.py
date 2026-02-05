@@ -8,13 +8,7 @@ class GestureControlApp:
     """Main application coordinating all components"""
     
     def __init__(self, camera_id=0):
-        """
-        Initialize the gesture control application
-        
-        Args:
-            camera_id: Webcam device ID (0 for default camera)
-        """
-        # Initialize components
+
         self.hand_tracker = HandTracker(max_hands=1)
         self.gesture_recognizer = GestureRecognizer(history_size=10)
         self.virtual_desktop = VirtualDesktop(width=1280, height=720)
