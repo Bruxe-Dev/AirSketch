@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 from hand_tracker import HandTracker
 from gesture_recognizer import GestureRecognizer
-from virtual_desktop import VirtualDesktop
+from virtual_window import VirtualDesktop
 
 class GestureControlApp:
     """Main application coordinating all components"""
