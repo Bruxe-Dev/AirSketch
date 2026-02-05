@@ -79,4 +79,38 @@ class GestureRecognizer:
 
         return False
 
-    
+
+    def detect_cirlce(self, threshold = 200)-> Optional[str]:
+
+        if len(self.position_history) < 8:
+            return None
+
+        total_distance = 0
+        for i in range( 1, len(self.position_history)):
+            p1 = self.position_history[i-1]
+            p2 = self.position_history[i]
+            total_distance = np.sqrt((p2[0] - p1[0])**2 + (p2[1] - p1[1])**2)
+        
+        if total_distance < threshold:
+            return None
+        
+                # Check if start and end are close (closed loop)
+        start = self.position_history[0]
+        end = self.position_history[-1]
+        closure_distance = np.sqrt((end[0]-start[0])**2 + (end[1]-start[1])**2)
+        
+        if closure_distance < 50:  # Points are close = closed loop
+            # Determine direction using cross product
+            cross_sum = 0
+            for i in range(1, len(self.position_history)):
+                p1 = self.position_history[i-1]
+                p2 = self.position_history[i]
+                cross_sum += (p2[0] - p1[0]) * (p2[1] + p1[1])
+            
+            if self.gesture_cooldown == 0:
+                self.gesture_cooldown = self.cooldown_frames
+                return 'clockwise' if cross_sum > 0 else 'counterclockwise'
+        
+        return None
+
+        
