@@ -1,3 +1,102 @@
+# Gesture Control System
+
+A Python-based hand gesture recognition system that uses your webcam to track hand movements and control a virtual desktop environment. Perfect for testing gesture controls before deploying to real system control.
+
+## 🌟 Features
+
+- **Real-time Hand Tracking**: Uses MediaPipe for accurate hand landmark detection
+- **Multiple Gesture Recognition**:
+  - ✋ Point with index finger to move cursor
+  - 🤏 Pinch to click/drag windows
+  - 👋 Swipe (with open hand) to move windows
+  - 👊 Push (toward camera) to enlarge windows
+  - ✊ Pull (away from camera) to shrink windows
+- **Virtual Desktop Testing Environment**: Safe testing environment with draggable windows
+- **Modular Architecture**: Easy to extend with new gestures or real system controls
+
+## 📋 Prerequisites
+
+- Python 3.8 or higher
+- Webcam (built-in or external USB)
+- Operating System: Windows, macOS, or Linux
+
+## 🚀 Installation
+
+### Step 1: Clone or Download the Project
+
+If you have this folder, navigate to it:
+```bash
+cd gesture_control
+```
+
+### Step 2: Create Virtual Environment (Recommended)
+
+```bash
+# Create virtual environment
+python -m venv venv
+
+# Activate it
+# On Windows:
+venv\Scripts\activate
+# On macOS/Linux:
+source venv/bin/activate
+```
+
+### Step 3: Install Dependencies
+
+```bash
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+This will install:
+- **OpenCV**: For webcam access and image processing
+- **MediaPipe**: Google's hand tracking library (v0.10.30+)
+- **NumPy**: For numerical computations
+
+**Note:** On first run, the app will automatically download the hand landmark model (~10MB). This is a one-time download.
+
+## 🎮 Usage
+
+### Running the Application
+
+```bash
+python main.py
+```
+
+### Controls
+
+**Hand Gestures:**
+- **Point** (index finger extended): Move the cursor around the virtual desktop
+- **Pinch** (thumb + index finger together): Click and drag windows by their title bar
+- **Open Hand + Swipe**: Move the active window in the swipe direction
+- **Push** (move hand toward camera): Enlarge the active window
+- **Pull** (move hand away from camera): Shrink the active window
+
+**Keyboard Shortcuts:**
+- `c`: Toggle camera view on/off
+- `r`: Reset all windows to default positions
+- `q`: Quit the application
+
+## 📁 Project Structure
+
+```
+gesture_control/
+│
+├── main.py                    # Main application entry point
+├── hand_tracker.py           # Hand tracking with MediaPipe
+├── gesture_recognizer.py     # Gesture pattern recognition
+├── virtual_desktop.py        # Virtual desktop UI simulation
+├── requirements.txt          # Python dependencies
+└── README.md                 # This file
+```
+
+## 🔧 How It Works
+
+### 1. Hand Tracker (`hand_tracker.py`)
+
+The `HandTracker` class uses MediaPipe's new Tasks API to detect and track hand landmarks:
+
 ```python
 tracker = HandTracker(max_hands=1)
 frame = tracker.find_hands(frame, draw=True)
@@ -7,11 +106,13 @@ fingers_up = tracker.count_fingers_up()
 ```
 
 **Key Methods:**
-- `find_hands()`: Detects hands in the webcam frame
+- `find_hands()`: Detects hands in the webcam frame using MediaPipe Tasks API
 - `get_finger_tip_position()`: Returns (x, y) coordinates of index finger tip
 - `is_pinching()`: Checks if thumb and index finger are close together
 - `count_fingers_up()`: Counts how many fingers are extended
 - `get_all_landmarks()`: Returns all 21 hand landmarks
+
+**Note:** This version uses MediaPipe 0.10.30+ which requires the Tasks API instead of the deprecated Solutions API.
 
 ### 2. Gesture Recognizer (`gesture_recognizer.py`)
 
@@ -191,6 +292,7 @@ recognizer.detect_push(threshold=200)   # Default is 150
 - **NumPy**: https://numpy.org/doc/stable/
 
 ## 🤝 Contributing Ideas
+**Next improvement steps:** 
 
 1. Add more gestures (peace sign, thumbs up, etc.)
 2. Multi-hand support for advanced controls
