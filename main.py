@@ -40,7 +40,7 @@ class HandTracker:
         
         return frame
 
-    def finger_print_position(self,hand_index =0,)->Optional[Tuple[int,int]]:
+    def finger_print_position(self,hand_index =0)->Optional[Tuple[int,int]]:
 
         if not self.results or not self.results.multi_hand_landmarks:
             return None
@@ -56,4 +56,41 @@ class HandTracker:
 
         return (x,y)
 
-    def get_all_landmarks(self,)
+    def get_all_landmarks(self,hand_index =0)->Optional[Tuple[int, int]]:
+
+        if not self.results or not self.results.multi_hand_landmarks:
+            return None
+        if hand_index >= len(self.results.multi_hand_landmarks):
+            return None
+
+        hand_landmarks =self.results.multi_hand_landmarks[hand_index]
+        h,w,_ = self.frame_shape
+        x = int(tip.x * w)
+        y = int(tip.y * h)
+
+        landmarks =[]
+
+        for landmark in hand_landmarks.landmark:
+            x= int(landmark.x * w)
+            y= int(landmark.y * h)
+            landmarks.append((x,y))
+        
+        return landmarks
+
+    def is_pinching(self,hand_index = 0, threshold = 40)->bool:
+
+        landmarks = self.get_all_landmarks(hand_index)
+        if not landmarks:
+            return False
+        
+        thumb_tip = landmarks[4]
+        index_tip = landmarks[8]
+
+        #Calculate the distance
+
+        distance = np.sqrt((thumb_tip[0] - index_tip[0]) **2 +
+                            (thumb_tip[1] - index_tip[1]) **2)
+
+        return distance < threshold
+
+    
