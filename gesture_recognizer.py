@@ -113,4 +113,5 @@ class GestureRecognizer:
         
         return None
 
+    def reset(self):
         
