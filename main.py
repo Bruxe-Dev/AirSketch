@@ -39,3 +39,15 @@ class HandTracker:
                 )
         
         return frame
+
+    def finger_print_position(self,hand_index =0,)->Optional[Tuple[int,int]]:
+
+        if not self.results or not self.results.multi_hand_landmarks:
+            return None
+        if hand_index >= len(self.results.multi_hand_landmarks):
+            return None
+        
+        hand_landmarks = self.results.multi_hand_landmarks[hand_index]
+        tip = hand_landmarks.landmarks[8]
+
+        h, w, _
