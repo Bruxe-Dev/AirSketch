@@ -1,8 +1,3 @@
-"""
-Hand Tracker Module - Updated for MediaPipe 0.10.30+
-Handles webcam input and hand landmark detection using MediaPipe Tasks API
-"""
-
 import cv2
 import numpy as np
 from typing import Optional, Tuple, List
@@ -11,17 +6,9 @@ from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 
 class HandTracker:
-    """Tracks hand landmarks and provides gesture detection capabilities"""
     
     def __init__(self, max_hands=1, min_detection_confidence=0.7, min_tracking_confidence=0.5):
-        """
-        Initialize the hand tracker
-        
-        Args:
-            max_hands: Maximum number of hands to detect
-            min_detection_confidence: Minimum confidence for hand detection
-            min_tracking_confidence: Minimum confidence for hand tracking
-        """
+
         # Create hand landmarker options
         base_options = python.BaseOptions(model_asset_path=self._download_model())
         options = vision.HandLandmarkerOptions(
@@ -62,16 +49,7 @@ class HandTracker:
         return model_path
     
     def find_hands(self, frame, draw=True):
-        """
-        Detect hands in the frame
-        
-        Args:
-            frame: BGR image from webcam
-            draw: Whether to draw hand landmarks on the frame
-            
-        Returns:
-            Processed frame with optional hand landmarks drawn
-        """
+
         self.frame_shape = frame.shape
         
         # Convert BGR to RGB for MediaPipe
